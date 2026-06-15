@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Refer and Earn | VAA Global</title>
+<meta name="description" content="Share VAA Global with your network. When a friend you refer enrolls and pays in full, you earn 20,000 Naira." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --purple: #5C3EA0;
+    --purple-deep: #432d76;
+    --purple-tint: #f1ecfa;
+    --gold: #E0A82E;
+    --gold-soft: #fbf2dc;
+    --ink: #1f1830;
+    --muted: #6b6480;
+    --line: #e7e3f0;
+    --white: #ffffff;
+    --bg: #faf9fd;
+    --green: #1f8a5b;
+    --green-soft: #e4f4ec;
+    --amber: #9a6a12;
+    --amber-soft: #fbf0d8;
+    --red: #9e2b2b;
+    --red-soft: #f7e4e4;
+    --grey: #6b6480;
+    --grey-soft: #efeef3;
+    --radius: 16px;
+    --shadow: 0 18px 50px -24px rgba(67, 45, 118, 0.45);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { width: 100%; max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+  /* Header */
+  header {
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .header-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+  .brand .mark {
+    width: 34px; height: 34px; border-radius: 9px;
+    background: var(--purple); color: var(--white);
+    display: grid; place-items: center; font-size: 14px; font-weight: 800;
+  }
+  .brand span.sub { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .header-link { font-size: 13px; font-weight: 600; color: var(--purple); text-decoration: none; }
+
+  /* Hero invite banner (for referred friends arriving via ?ref=) */
+  .invite-banner {
+    display: none;
+    background: linear-gradient(135deg, var(--purple) 0%, var(--purple-deep) 100%);
+    color: var(--white);
+  }
+  .invite-banner.show { display: block; }
+  .invite-inner { padding: 28px 0 30px; }
+  .invite-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
+  .invite-banner h1 { font-size: 26px; line-height: 1.2; letter-spacing: -0.02em; margin: 10px 0 8px; font-weight: 800; }
+  .invite-banner p { font-size: 15px; color: #e8e2f6; max-width: 520px; }
+  .invite-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 18px; background: var(--gold); color: var(--purple-deep);
+    font-weight: 700; font-size: 15px; text-decoration: none;
+    padding: 13px 22px; border-radius: 11px;
+  }
+  .invite-benefits { margin-top: 18px; display: grid; gap: 7px; font-size: 13.5px; color: #efeaf9; }
+  .invite-benefits div { display: flex; gap: 8px; }
+  .invite-benefits .tick { color: var(--gold); font-weight: 800; }
+
+  /* Sections */
+  main { padding: 30px 0 70px; }
+  .lead { margin-bottom: 24px; }
+  .lead .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--purple); }
+  .lead h2 { font-size: 27px; line-height: 1.18; letter-spacing: -0.025em; margin: 8px 0 10px; font-weight: 800; }
+  .lead p { color: var(--muted); font-size: 15px; max-width: 540px; }
+
+  /* Card */
+  .card {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 24px;
+  }
+  .card + .card { margin-top: 18px; }
+
+  /* Login */
+  .field { margin-bottom: 15px; }
+  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 7px; color: var(--ink); }
+  .field input {
+    width: 100%; padding: 13px 14px; font-size: 15px; font-family: inherit;
+    border: 1.5px solid var(--line); border-radius: 11px; background: var(--white); color: var(--ink);
+    transition: border-color 0.15s;
+  }
+  .field input:focus { outline: none; border-color: var(--purple); }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 7px; }
+
+  .btn {
+    width: 100%; border: none; cursor: pointer; font-family: inherit;
+    font-size: 15px; font-weight: 700; padding: 14px 18px; border-radius: 11px;
+    background: var(--purple); color: var(--white); transition: background 0.15s, transform 0.05s;
+  }
+  .btn:hover { background: var(--purple-deep); }
+  .btn:active { transform: translateY(1px); }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn.gold { background: var(--gold); color: var(--purple-deep); }
+  .btn.gold:hover { background: #cf991f; }
+  .btn.ghost { background: var(--purple-tint); color: var(--purple); }
+  .btn.ghost:hover { background: #e7defa; }
+  .btn.small { width: auto; padding: 10px 16px; font-size: 13.5px; }
+
+  .msg { font-size: 13.5px; margin-top: 12px; padding: 11px 13px; border-radius: 10px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: var(--red-soft); color: var(--red); }
+  .msg.ok { background: var(--green-soft); color: var(--green); }
+
+  /* Dashboard */
+  #dashboard { display: none; }
+  #dashboard.show { display: block; }
+  #login-view.hide { display: none; }
+
+  .greeting { margin-bottom: 20px; }
+  .greeting .hi { font-size: 13px; color: var(--muted); font-weight: 600; }
+  .greeting h2 { font-size: 24px; letter-spacing: -0.02em; font-weight: 800; }
+  .signout { background: none; border: none; color: var(--purple); font-weight: 600; font-size: 13px; cursor: pointer; padding: 0; }
+
+  /* Earnings strip */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+  .stat {
+    background: var(--white); border: 1px solid var(--line); border-radius: 14px; padding: 16px 14px;
+  }
+  .stat .num { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; }
+  .stat .lbl { font-size: 11.5px; color: var(--muted); font-weight: 600; margin-top: 4px; }
+  .stat.paid .num { color: var(--green); }
+  .stat.pending .num { color: var(--amber); }
+
+  /* Share card - the signature element */
+  .share-card {
+    background: linear-gradient(150deg, var(--purple) 0%, var(--purple-deep) 100%);
+    border-radius: 18px; padding: 24px; color: var(--white); position: relative; overflow: hidden;
+  }
+  .share-card::after {
+    content: ""; position: absolute; right: -40px; bottom: -50px;
+    width: 170px; height: 170px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(224,168,46,0.35) 0%, rgba(224,168,46,0) 70%);
+  }
+  .share-card .label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+  .share-card .reward-line { font-size: 17px; font-weight: 700; margin: 8px 0 18px; line-height: 1.35; max-width: 440px; }
+  .share-card .reward-line b { color: var(--gold); }
+
+  .code-row {
+    display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 6px 6px 6px 16px; margin-bottom: 12px;
+    position: relative; z-index: 1;
+  }
+  .code-row .code-val { flex: 1; font-weight: 800; font-size: 18px; letter-spacing: 0.06em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .code-row .copy-btn {
+    background: var(--white); color: var(--purple-deep); border: none; cursor: pointer; font-family: inherit;
+    font-weight: 700; font-size: 13px; padding: 9px 14px; border-radius: 9px; flex-shrink: 0;
+  }
+
+  .link-row {
+    display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.18);
+    border-radius: 12px; padding: 6px 6px 6px 16px; position: relative; z-index: 1;
+  }
+  .link-row .link-val { flex: 1; font-size: 13px; color: #e0d8f3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .link-row .copy-btn {
+    background: rgba(255,255,255,0.15); color: var(--white); border: 1px solid rgba(255,255,255,0.25);
+    cursor: pointer; font-family: inherit; font-weight: 700; font-size: 13px; padding: 9px 14px; border-radius: 9px; flex-shrink: 0;
+  }
+  .share-actions { display: flex; gap: 10px; margin-top: 16px; position: relative; z-index: 1; }
+  .share-actions a, .share-actions button {
+    flex: 1; text-align: center; text-decoration: none; cursor: pointer; font-family: inherit;
+    font-weight: 700; font-size: 14px; padding: 12px; border-radius: 11px; border: none;
+  }
+  .share-wa { background: var(--gold); color: var(--purple-deep); }
+  .share-generic { background: rgba(255,255,255,0.14); color: var(--white); border: 1px solid rgba(255,255,255,0.25) !important; }
+
+  /* Section heading inside dashboard */
+  .block-head { display: flex; align-items: center; justify-content: space-between; margin: 28px 0 14px; }
+  .block-head h3 { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+  .block-head .count { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+
+  /* Referral list */
+  .ref-item {
+    background: var(--white); border: 1px solid var(--line); border-radius: 13px;
+    padding: 15px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  }
+  .ref-item + .ref-item { margin-top: 10px; }
+  .ref-who { min-width: 0; }
+  .ref-who .nm { font-weight: 700; font-size: 14.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ref-who .cs { font-size: 12.5px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ref-right { text-align: right; flex-shrink: 0; }
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+    padding: 5px 10px; border-radius: 999px; white-space: nowrap;
+  }
+  .badge.paid { background: var(--green-soft); color: var(--green); }
+  .badge.pending { background: var(--amber-soft); color: var(--amber); }
+  .badge.review { background: var(--purple-tint); color: var(--purple); }
+  .badge.void { background: var(--grey-soft); color: var(--grey); }
+  .badge.expired { background: var(--grey-soft); color: var(--grey); }
+  .badge.flagged { background: var(--red-soft); color: var(--red); }
+  .ref-right .amt { font-size: 12px; color: var(--muted); margin-top: 5px; font-weight: 600; }
+
+  .empty {
+    text-align: center; padding: 34px 20px; color: var(--muted); font-size: 14px;
+    border: 1px dashed var(--line); border-radius: 13px; background: var(--white);
+  }
+  .empty b { color: var(--ink); display: block; margin-bottom: 4px; font-size: 15px; }
+
+  /* Bank details */
+  .bank-status { font-size: 13px; padding: 11px 13px; border-radius: 10px; margin-bottom: 14px; font-weight: 600; }
+  .bank-status.set { background: var(--green-soft); color: var(--green); }
+  .bank-status.unset { background: var(--amber-soft); color: var(--amber); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* How it works */
+  .steps { display: grid; gap: 14px; }
+  .step { display: flex; gap: 14px; align-items: flex-start; }
+  .step .n {
+    flex-shrink: 0; width: 30px; height: 30px; border-radius: 9px; background: var(--purple-tint);
+    color: var(--purple); font-weight: 800; font-size: 14px; display: grid; place-items: center;
+  }
+  .step .t { font-weight: 700; font-size: 14.5px; }
+  .step .d { font-size: 13.5px; color: var(--muted); margin-top: 2px; }
+
+  details.terms { margin-top: 18px; border: 1px solid var(--line); border-radius: 13px; background: var(--white); }
+  details.terms summary { cursor: pointer; padding: 16px 18px; font-weight: 700; font-size: 14.5px; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  details.terms summary::-webkit-details-marker { display: none; }
+  details.terms summary::after { content: "+"; font-size: 20px; color: var(--purple); font-weight: 700; }
+  details.terms[open] summary::after { content: "\2212"; }
+  details.terms .terms-body { padding: 0 18px 18px; font-size: 13.5px; color: var(--muted); }
+  details.terms .terms-body ul { list-style: none; display: grid; gap: 9px; }
+  details.terms .terms-body li { display: flex; gap: 9px; }
+  details.terms .terms-body li::before { content: "-"; color: var(--purple); font-weight: 700; }
+
+  footer { border-top: 1px solid var(--line); padding: 22px 0; text-align: center; color: var(--muted); font-size: 12.5px; }
+  footer a { color: var(--purple); text-decoration: none; font-weight: 600; }
+
+  .spinner {
+    width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.4); border-top-color: var(--white);
+    border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; vertical-align: -3px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-full { text-align: center; padding: 50px 20px; color: var(--muted); }
+  .loading-full .spinner { border-color: var(--line); border-top-color: var(--purple); width: 28px; height: 28px; }
+
+  @media (max-width: 520px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .stats .stat:first-child { grid-column: 1 / -1; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .lead h2 { font-size: 23px; }
+    .invite-banner h1 { font-size: 22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* Leaderboard */
+  .lboard { margin-top: 28px; }
+  .lboard-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .lboard-head h3 { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+  .lboard-sub { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .lboard-list { display: grid; gap: 10px; }
+  .lboard-item { background: var(--white); border: 1px solid var(--line); border-radius: 13px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; }
+  .lboard-item.top1 { border-color: var(--gold); background: #fffbf0; }
+  .lboard-item.top2 { border-color: #c0c8d8; background: #f8f9fc; }
+  .lboard-item.top3 { border-color: #d4a87a; background: #fdf6f0; }
+  .lboard-rank { width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; background: var(--purple-tint); color: var(--purple); font-weight: 800; font-size: 14px; display: grid; place-items: center; }
+  .lboard-item.top1 .lboard-rank { background: var(--gold); color: var(--purple-deep); }
+  .lboard-item.top2 .lboard-rank { background: #c0c8d8; color: #3a4a60; }
+  .lboard-item.top3 .lboard-rank { background: #d4a87a; color: #5a3010; }
+  .lboard-who { flex: 1; min-width: 0; }
+  .lboard-nm { font-weight: 700; font-size: 14.5px; }
+  .lboard-ct { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .lboard-earned { text-align: right; flex-shrink: 0; font-weight: 800; font-size: 14px; color: var(--green); }
+  .lboard-earned.pending { color: var(--amber); }
+  .lboard-elabel { font-size: 11px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+  .lboard-empty { text-align: center; padding: 26px 16px; color: var(--muted); font-size: 14px; border: 1px dashed var(--line); border-radius: 13px; background: var(--white); }
+  .lboard-loading { text-align: center; padding: 24px; color: var(--muted); font-size: 13.5px; }
+
+
+  /* Bank already saved - show clean state */
+  .bank-saved { display: none; }
+  .bank-saved.show { display: block; }
+  .bank-edit-toggle {
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    font-size: 13px; font-weight: 700; color: var(--purple); padding: 0;
+    text-decoration: underline; margin-top: 6px; display: block;
+  }
+  .bank-fields { }
+  .bank-fields.hidden { display: none; }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap header-inner">
+    <div class="brand">
+      <div class="mark">VG</div>
+      <div>VAA Global<br /><span class="sub">Refer and Earn</span></div>
+    </div>
+    <a class="header-link" href="https://vaaglobal.tech">Back to site</a>
+  </div>
+</header>
+
+<!-- Shown only when a friend arrives via a referral link (?ref=CODE) -->
+<section class="invite-banner" id="inviteBanner">
+  <div class="wrap invite-inner">
+    <div class="invite-eyebrow">You have been invited</div>
+    <h1 id="inviteHeadline">A friend invited you to VAA Global</h1>
+    <p>Learn a high-income remote skill, get a 2-month internship, and join 405+ students who have secured remote jobs. Your referral code is already attached, just enroll and pay to get started.</p>
+    <div class="invite-benefits">
+      <div><span class="tick">+</span> 2-month internship and job assistance</div>
+      <div><span class="tick">+</span> Lifetime access to 100,000+ curated remote jobs</div>
+      <div><span class="tick">+</span> Accredited certificate endorsed by SDC Canada</div>
+    </div>
+    <a class="invite-cta" id="inviteCta" href="https://vaaglobal.tech/enroll">Enroll with this invite</a>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <!-- LOGIN VIEW -->
+  <div id="login-view">
+    <div class="lead">
+      <div class="eyebrow">For VAA Global students and alumni</div>
+      <h2>Share VAA Global. Earn 20,000 Naira per friend.</h2>
+      <p>When a friend you refer enrolls and pays their full course fee, you earn 20,000 Naira. Sign in to get your personal link and track your earnings.</p>
+    </div>
+
+    <div class="card">
+      <div class="field">
+        <label for="identifier">Your matric number, reference number, or email</label>
+        <input id="identifier" type="text" placeholder="VAA/2026/0001  or  VAA-2026-000123  or  email" autocomplete="off" />
+        <div class="hint">Use the same details you registered or onboarded with. Only enrolled students and alumni can refer.</div>
+      </div>
+      <button class="btn" id="loginBtn">Get my referral link</button>
+      <div class="msg" id="loginMsg"></div>
+    </div>
+
+    <div class="block-head"><h3>How it works</h3></div>
+    <div class="card">
+      <div class="steps">
+        <div class="step">
+          <div class="n">1</div>
+          <div><div class="t">Share your link</div><div class="d">Send your personal link to friends on WhatsApp or anywhere else. Your referral code is built into it.</div></div>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <div><div class="t">They enroll and pay full price</div><div class="d">Your friend applies through your link and pays their full course fee with no discount applied.</div></div>
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <div><div class="t">You get 20,000 Naira</div><div class="d">Once their payment is complete and confirmed, your reward is approved and paid to your bank account.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <details class="terms">
+      <summary>Referral terms</summary>
+      <div class="terms-body">
+        <ul>
+          <li>The reward is 20,000 Naira for every friend who enrolls through your link and pays their full course fee.</li>
+          <li>The reward does not apply when any discount, scholarship, or promo is used on the enrollment.</li>
+          <li>For one-time payers, the reward is released after the referred student completes onboarding.</li>
+          <li>For installment payers, the reward is released only after the full balance has been paid.</li>
+          <li>You cannot refer yourself. Self-referrals and duplicate or fake signups are removed and forfeit the reward.</li>
+          <li>A referred student must be new to VAA Global. Existing students do not qualify.</li>
+          <li>Rewards are reviewed and approved before payout. VAA Global may withhold rewards linked to fraud or abuse.</li>
+        </ul>
+      </div>
+    </details>
+
+    <div class="lboard" id="lboard">
+      <div class="lboard-head">
+        <h3>Top referrers</h3>
+        <span class="lboard-sub">Updated in real time</span>
+      </div>
+      <div class="lboard-list" id="lboardList">
+        <div class="lboard-loading">Loading...</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboard">
+    <div class="greeting" style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <div>
+        <div class="hi">Welcome back</div>
+        <h2 id="refName">Your name</h2>
+      </div>
+      <button class="signout" id="signoutBtn">Sign out</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat paid">
+        <div class="num" id="statPaid">0</div>
+        <div class="lbl">Naira earned and paid</div>
+      </div>
+      <div class="stat pending">
+        <div class="num" id="statPending">0</div>
+        <div class="lbl">Naira pending</div>
+      </div>
+      <div class="stat">
+        <div class="num" id="statCount">0</div>
+        <div class="lbl">Friends enrolled</div>
+      </div>
+    </div>
+
+    <div class="share-card">
+      <div class="label">Your referral link and code</div>
+      <div class="reward-line">Every friend who enrolls and pays in full earns you <b>20,000 Naira</b>.</div>
+      <div class="code-row">
+        <div class="code-val" id="codeVal">VAACODE</div>
+        <button class="copy-btn" data-copy="code">Copy code</button>
+      </div>
+      <div class="link-row">
+        <div class="link-val" id="linkVal">https://vaaglobal.tech/referral?ref=VAACODE</div>
+        <button class="copy-btn" data-copy="link">Copy</button>
+      </div>
+      <div class="share-actions">
+        <a class="share-wa" id="waShare" href="#" target="_blank" rel="noopener">Share on WhatsApp</a>
+        <button class="share-generic" id="nativeShare">Share link</button>
+      </div>
+    </div>
+
+    <div class="block-head">
+      <h3>Your referrals</h3>
+      <span class="count" id="refCount"></span>
+    </div>
+    <div id="refList"></div>
+
+    <div class="block-head"><h3>Payout bank account</h3></div>
+    <div class="card">
+      <div class="bank-status unset" id="bankStatus">Add your bank details so we can pay your rewards.</div>
+      <div class="field">
+        <label for="bankName">Bank name</label>
+        <input id="bankName" type="text" placeholder="e.g. Access Bank" autocomplete="off" />
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label for="acctNumber">Account number</label>
+          <input id="acctNumber" type="text" inputmode="numeric" maxlength="10" placeholder="10-digit number" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="acctName">Account name</label>
+          <input id="acctName" type="text" placeholder="As it appears on your account" autocomplete="off" />
+        </div>
+      </div>
+      <button class="btn ghost" id="saveBankBtn">Save bank details</button>
+      <div class="msg" id="bankMsg"></div>
+    </div>
+
+    <details class="terms">
+      <summary>Referral terms</summary>
+      <div class="terms-body">
+        <ul>
+          <li>The reward is 20,000 Naira for every friend who enrolls through your link and pays their full course fee.</li>
+          <li>The reward does not apply when any discount, scholarship, or promo is used on the enrollment.</li>
+          <li>For one-time payers, the reward is released after the referred student completes onboarding.</li>
+          <li>For installment payers, the reward is released only after the full balance has been paid.</li>
+          <li>You cannot refer yourself. Self-referrals and duplicate or fake signups are removed and forfeit the reward.</li>
+          <li>A referred student must be new to VAA Global. Existing students do not qualify.</li>
+          <li>Rewards are reviewed and approved before payout. VAA Global may withhold rewards linked to fraud or abuse.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+</main>
+
+<footer class="wrap">
+  VAA Global Academy. Questions about your reward? Message us on WhatsApp.<br />
+  <a href="https://vaaglobal.tech">vaaglobal.tech</a>
+</footer>
+
+<script>
+  // ======================================================================
+  // CONFIG  -  paste your deployed Apps Script Web App URL here
+  // ======================================================================
+  const API_URL = "https://script.google.com/macros/s/AKfycbzD53u7bZ5_DXLVvtZaQoPlZ6atirFlWu1_i1L4HkN8Cm2QCzYMDquVd9PmC5L1Now/exec";
+  const REWARD = 20000;
+  const SITE = "https://vaaglobal.tech";
+  const APPLY_PATH = "/enroll"; // where the friend enrolls
+
+  // ---------- helpers ----------
+  const $ = (id) => document.getElementById(id);
+  const fmt = (n) => Number(n || 0).toLocaleString("en-NG");
+  const qs = (k) => new URLSearchParams(location.search).get(k);
+
+  function api(action, payload) {
+    return fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" }, // avoids CORS preflight on Apps Script
+      body: JSON.stringify(Object.assign({ action }, payload || {}))
+    }).then((r) => r.json());
+  }
+
+  function showMsg(el, text, kind) {
+    el.textContent = text;
+    el.className = "msg show " + kind;
+  }
+  function hideMsg(el) { el.className = "msg"; }
+
+  // ---------- referred-friend banner ----------
+  function handleInvite() {
+    const ref = qs("ref");
+    if (!ref) return;
+    const banner = $("inviteBanner");
+    banner.classList.add("show");
+    const cta = $("inviteCta");
+    cta.href = SITE + APPLY_PATH + "?ref=" + encodeURIComponent(ref);
+    // Optionally resolve the referrer's first name for warmth
+    api("resolveReferrer", { code: ref }).then((res) => {
+      if (res && res.ok && res.firstName) {
+        $("inviteHeadline").textContent = res.firstName + " invited you to VAA Global";
+      }
+    }).catch(() => {});
+  }
+
+  // ---------- login ----------
+  const loginBtn = $("loginBtn");
+  loginBtn.addEventListener("click", doLogin);
+  $("identifier").addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
+
+  function doLogin() {
+    const identifier = $("identifier").value.trim();
+    const msg = $("loginMsg");
+    hideMsg(msg);
+    if (!identifier) { showMsg(msg, "Enter your matric number, reference number, or email.", "error"); return; }
+    if (API_URL.indexOf("PASTE_") === 0) { showMsg(msg, "Setup needed: the referral backend URL has not been connected yet.", "error"); return; }
+
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="spinner"></span>';
+    api("verifyReferrer", { identifier }).then((res) => {
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Get my referral link";
+      if (!res || !res.ok) {
+        showMsg(msg, (res && res.error) || "We could not find an enrolled account with those details.", "error");
+        return;
+      }
+      sessionStorage.setItem("vaa_ref_id", identifier);
+      localStorage.setItem("vaa_ref_id", identifier); // survives page refresh
+      renderDashboard(res);
+    }).catch(() => {
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Get my referral link";
+      showMsg(msg, "Something went wrong. Please try again.", "error");
+    });
+  }
+
+  // ---------- dashboard ----------
+  function renderDashboard(data) {
+    $("login-view").classList.add("hide");
+    $("inviteBanner").classList.remove("show");
+    $("dashboard").classList.add("show");
+    window.scrollTo({ top: 0 });
+
+    $("refName").textContent = data.name || "There";
+    $("statPaid").textContent = fmt(data.totals ? data.totals.paid : 0);
+    $("statPending").textContent = fmt(data.totals ? data.totals.pending : 0);
+    $("statCount").textContent = data.totals ? data.totals.count : 0;
+
+    const code = data.code || "";
+    const link = SITE + "/referral?ref=" + encodeURIComponent(code);
+    $("codeVal").textContent = code;
+    $("linkVal").textContent = link;
+
+    const waText = encodeURIComponent(
+      "I have been learning with VAA Global and it has been worth it. Use my link to enroll, get a 2-month internship, job assistance, and access to high-paying remote jobs: " + link
+    );
+    $("waShare").href = "https://wa.me/?text=" + waText;
+
+    $("nativeShare").onclick = () => {
+      if (navigator.share) {
+        navigator.share({ title: "VAA Global", text: "Enroll with my link and start your remote career.", url: link }).catch(() => {});
+      } else {
+        copyText(link, $("nativeShare"), "Share link");
+      }
+    };
+
+    // referral list
+    renderRefList(data.referrals || []);
+
+    // bank details
+    if (data.bank && data.bank.accountNumber) {
+      $("bankName").value = data.bank.bankName || "";
+      $("acctNumber").value = data.bank.accountNumber || "";
+      $("acctName").value = data.bank.accountName || "";
+      const bs = $("bankStatus");
+      bs.className = "bank-status set";
+      bs.textContent = "Bank details saved. Rewards are paid to this account.";
+      // Show the saved summary, hide the input fields
+      $("bankSaved").classList.add("show");
+      $("bankFields").classList.add("hidden");
+      $("bankSummary").innerHTML =
+        "<strong>" + esc(data.bank.bankName || "") + "</strong><br>" +
+        "Account: " + esc(data.bank.accountNumber || "") + "<br>" +
+        esc(data.bank.accountName || "");
+    }
+  }
+
+  function statusMeta(status) {
+    switch (status) {
+      case "paid": return { cls: "paid", label: "Paid" };
+      case "pending_approval": return { cls: "review", label: "In review" };
+      case "approved": return { cls: "review", label: "Approved" };
+      case "pending_onboarding": return { cls: "pending", label: "Awaiting onboarding" };
+      case "pending_payment": return { cls: "pending", label: "Completing payments" };
+      case "void_discount": return { cls: "void", label: "Not eligible (discount)" };
+      case "expired": return { cls: "expired", label: "Closed, not completed" };
+      case "flagged": return { cls: "flagged", label: "Under check" };
+      case "rejected": return { cls: "flagged", label: "Not approved" };
+      default: return { cls: "pending", label: "Pending" };
+    }
+  }
+
+  function renderRefList(refs) {
+    const wrap = $("refList");
+    $("refCount").textContent = refs.length ? refs.length + (refs.length === 1 ? " referral" : " referrals") : "";
+    if (!refs.length) {
+      wrap.innerHTML = '<div class="empty"><b>No referrals yet</b>Share your link above. Your first referral will show up here the moment your friend enrolls.</div>';
+      return;
+    }
+    wrap.innerHTML = refs.map((r) => {
+      const m = statusMeta(r.status);
+      const earns = (r.status === "paid" || r.status === "approved" || r.status === "pending_approval");
+      const amt = (r.status === "void_discount" || r.status === "expired" || r.status === "rejected")
+        ? "" : '<div class="amt">' + (r.status === "paid" ? "" : "Worth ") + fmt(REWARD) + " Naira</div>";
+      return '<div class="ref-item"><div class="ref-who"><div class="nm">' + esc(r.name || "Referred friend") +
+             '</div><div class="cs">' + esc(r.course || "Enrollment") + '</div></div>' +
+             '<div class="ref-right"><span class="badge ' + m.cls + '">' + m.label + '</span>' + (earns ? amt : "") + '</div></div>';
+    }).join("");
+  }
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+
+  // ---------- copy ----------
+  document.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const which = btn.getAttribute("data-copy");
+      const text = which === "code" ? $("codeVal").textContent : $("linkVal").textContent;
+      copyText(text, btn, btn.textContent);
+    });
+  });
+  function copyText(text, btn, original) {
+    navigator.clipboard.writeText(text).then(() => {
+      const o = original;
+      btn.textContent = "Copied";
+      setTimeout(() => { btn.textContent = o; }, 1400);
+    }).catch(() => {});
+  }
+
+  // ---------- bank details ----------
+  $("saveBankBtn").addEventListener("click", () => {
+    const identifier = sessionStorage.getItem("vaa_ref_id") || localStorage.getItem("vaa_ref_id");
+    const bankName = $("bankName").value.trim();
+    const accountNumber = $("acctNumber").value.trim();
+    const accountName = $("acctName").value.trim();
+    const msg = $("bankMsg");
+    hideMsg(msg);
+    // Guard: session expired or page refreshed — ask them to sign in again
+    if (!identifier) {
+      showMsg(msg, "Your session has expired. Please sign out and sign in again to save your bank details.", "error");
+      return;
+    }
+    if (!bankName || !accountNumber || !accountName) { showMsg(msg, "Fill in all three fields.", "error"); return; }
+    if (!/^\d{10}$/.test(accountNumber)) { showMsg(msg, "Account number should be 10 digits.", "error"); return; }
+
+    const b = $("saveBankBtn");
+    b.disabled = true; b.innerHTML = '<span class="spinner"></span>';
+    api("saveBank", { identifier, bankName, accountNumber, accountName }).then((res) => {
+      b.disabled = false; b.textContent = "Save bank details";
+      if (res && res.ok) {
+        showMsg(msg, "Bank details saved.", "ok");
+        const bs = $("bankStatus");
+        bs.className = "bank-status set";
+        bs.textContent = "Bank details saved. Rewards are paid to this account.";
+        // Show saved summary and collapse fields
+        const bn = $("bankName").value.trim();
+        const an = $("acctNumber").value.trim();
+        const acn = $("acctName").value.trim();
+        $("bankSummary").innerHTML = "<strong>" + esc(bn) + "</strong><br>Account: " + esc(an) + "<br>" + esc(acn);
+        $("bankSaved").classList.add("show");
+        $("bankFields").classList.add("hidden");
+      } else {
+        showMsg(msg, (res && res.error) || "Could not save. Try again.", "error");
+      }
+    }).catch(() => {
+      b.disabled = false; b.textContent = "Save bank details";
+      showMsg(msg, "Something went wrong. Try again.", "error");
+    });
+  });
+
+  // ---------- bank edit toggle ----------
+  document.getElementById("bankEditToggle").addEventListener("click", function() {
+    $("bankSaved").classList.remove("show");
+    $("bankFields").classList.remove("hidden");
+    $("bankName").focus();
+  });
+
+  // ---------- sign out ----------
+  $("signoutBtn").addEventListener("click", () => {
+    sessionStorage.removeItem("vaa_ref_id");
+    localStorage.removeItem("vaa_ref_id");
+    location.href = location.pathname;
+  });
+
+
+  // ---------- leaderboard ----------
+  function loadLeaderboard() {
+    if (API_URL.indexOf("PASTE_") === 0) return;
+    api("getLeaderboard", { limit: 10 }).then(function(res) {
+      var el = document.getElementById("lboardList");
+      if (!res || !res.ok || !res.entries || !res.entries.length) {
+        el.innerHTML = '<div class="lboard-empty">No referrals yet. Be the first to refer a friend.</div>';
+        return;
+      }
+      var medals = ["top1","top2","top3"];
+      var rankLabels = ["1st","2nd","3rd"];
+      el.innerHTML = res.entries.map(function(e, i) {
+        var rc = i < 3 ? medals[i] : "";
+        var rl = i < 3 ? rankLabels[i] : String(i + 1);
+        var earnedNaira = e.earned > 0 ? e.earned : (e.count * 20000);
+        var isPaid = e.earned > 0;
+        var earnedHtml = '<div class="lboard-earned' + (isPaid ? "" : " pending") + '">' +
+          "₦" + fmt(earnedNaira) +
+          '<div class="lboard-elabel">' + (isPaid ? "paid out" : "pending") + '</div></div>';
+        return '<div class="lboard-item ' + rc + '">' +
+          '<div class="lboard-rank">' + rl + '</div>' +
+          '<div class="lboard-who">' +
+            '<div class="lboard-nm">' + esc(e.name) + '</div>' +
+            '<div class="lboard-ct">' + e.count + (e.count === 1 ? " referral" : " referrals") + '</div>' +
+          '</div>' +
+          earnedHtml +
+        '</div>';
+      }).join("");
+    }).catch(function() {
+      var el = document.getElementById("lboardList");
+      if (el) el.innerHTML = '<div class="lboard-empty">Could not load leaderboard right now.</div>';
+    });
+  }
+
+  // ---------- init ----------
+  handleInvite();
+
+  // Auto-login if we have a stored identifier
+  (function () {
+    const stored = localStorage.getItem("vaa_ref_id") || sessionStorage.getItem("vaa_ref_id");
+    if (!stored) return;
+    // Show a subtle loading state on the login button
+    loginBtn.disabled = true;
+    loginBtn.textContent = "Signing you in...";
+    api("verifyReferrer", { identifier: stored }).then((res) => {
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Get my referral link";
+      if (res && res.ok) {
+        sessionStorage.setItem("vaa_ref_id", stored);
+        renderDashboard(res);
+      } else {
+        // Stored session is stale — clear it silently, show login form normally
+        localStorage.removeItem("vaa_ref_id");
+        sessionStorage.removeItem("vaa_ref_id");
+      }
+    }).catch(() => {
+      loginBtn.disabled = false;
+      loginBtn.textContent = "Get my referral link";
+    });
+  })();
+  loadLeaderboard();
+</script>
+</body>
+</html>
