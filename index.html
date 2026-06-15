@@ -310,6 +310,16 @@
   .bank-fields { }
   .bank-fields.hidden { display: none; }
 
+
+  /* Bank saved state */
+  .bank-saved { display: none; }
+  .bank-saved.show { display: block; margin-bottom: 12px; }
+  .bank-edit-toggle {
+    background: none; border: none; cursor: pointer; font-family: inherit;
+    font-size: 13px; font-weight: 700; color: var(--purple); padding: 2px 0 0;
+    text-decoration: underline; display: inline-block; margin-top: 4px;
+  }
+  #bankFields.hidden { display: none; }
 </style>
 </head>
 <body>
@@ -355,7 +365,7 @@
         <input id="identifier" type="text" placeholder="VAA/2026/0001  or  VAA-2026-000123  or  email" autocomplete="off" />
         <div class="hint">Use the same details you registered or onboarded with. Only enrolled students and alumni can refer.</div>
       </div>
-      <button class="btn" id="loginBtn">Get my referral link</button>
+      <button class="btn" id="loginBtn">Login / Get my referral link</button>
       <div class="msg" id="loginMsg"></div>
     </div>
 
@@ -455,22 +465,32 @@
     <div class="block-head"><h3>Payout bank account</h3></div>
     <div class="card">
       <div class="bank-status unset" id="bankStatus">Add your bank details so we can pay your rewards.</div>
-      <div class="field">
-        <label for="bankName">Bank name</label>
-        <input id="bankName" type="text" placeholder="e.g. Access Bank" autocomplete="off" />
+
+      <!-- Shown when bank is already saved -->
+      <div class="bank-saved" id="bankSaved">
+        <div style="font-size:14px;color:var(--ink);line-height:1.9;" id="bankSummary"></div>
+        <button class="bank-edit-toggle" id="bankEditToggle">Edit bank details</button>
       </div>
-      <div class="grid-2">
+
+      <!-- Input fields — hidden when bank already saved -->
+      <div id="bankFields">
         <div class="field">
-          <label for="acctNumber">Account number</label>
-          <input id="acctNumber" type="text" inputmode="numeric" maxlength="10" placeholder="10-digit number" autocomplete="off" />
+          <label for="bankName">Bank name</label>
+          <input id="bankName" type="text" placeholder="e.g. Access Bank" autocomplete="off" />
         </div>
-        <div class="field">
-          <label for="acctName">Account name</label>
-          <input id="acctName" type="text" placeholder="As it appears on your account" autocomplete="off" />
+        <div class="grid-2">
+          <div class="field">
+            <label for="acctNumber">Account number</label>
+            <input id="acctNumber" type="text" inputmode="numeric" maxlength="10" placeholder="10-digit number" autocomplete="off" />
+          </div>
+          <div class="field">
+            <label for="acctName">Account name</label>
+            <input id="acctName" type="text" placeholder="As it appears on your account" autocomplete="off" />
+          </div>
         </div>
+        <button class="btn ghost" id="saveBankBtn">Save bank details</button>
+        <div class="msg" id="bankMsg"></div>
       </div>
-      <button class="btn ghost" id="saveBankBtn">Save bank details</button>
-      <div class="msg" id="bankMsg"></div>
     </div>
 
     <details class="terms">
@@ -556,7 +576,7 @@
     loginBtn.innerHTML = '<span class="spinner"></span>';
     api("verifyReferrer", { identifier }).then((res) => {
       loginBtn.disabled = false;
-      loginBtn.textContent = "Get my referral link";
+      loginBtn.textContent = "Login / Get my referral link";
       if (!res || !res.ok) {
         showMsg(msg, (res && res.error) || "We could not find an enrolled account with those details.", "error");
         return;
@@ -568,7 +588,7 @@
       renderDashboard(res);
     }).catch(() => {
       loginBtn.disabled = false;
-      loginBtn.textContent = "Get my referral link";
+      loginBtn.textContent = "Login / Get my referral link";
       showMsg(msg, "Something went wrong. Please try again.", "error");
     });
   }
@@ -780,7 +800,7 @@
     loginBtn.textContent = "Signing you in...";
     api("verifyReferrer", { identifier: stored }).then((res) => {
       loginBtn.disabled = false;
-      loginBtn.textContent = "Get my referral link";
+      loginBtn.textContent = "Login / Get my referral link";
       if (res && res.ok) {
         sessionStorage.setItem("vaa_ref_id", stored);
         renderDashboard(res);
@@ -791,7 +811,7 @@
       }
     }).catch(() => {
       loginBtn.disabled = false;
-      loginBtn.textContent = "Get my referral link";
+      loginBtn.textContent = "Login / Get my referral link";
     });
   })();
   loadLeaderboard();
