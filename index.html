@@ -563,6 +563,8 @@
       }
       sessionStorage.setItem("vaa_ref_id", identifier);
       localStorage.setItem("vaa_ref_id", identifier); // survives page refresh
+      // Also store the referral code as a fallback identifier
+      if (res.code) localStorage.setItem("vaa_ref_code", res.code);
       renderDashboard(res);
     }).catch(() => {
       loginBtn.disabled = false;
@@ -678,7 +680,7 @@
 
   // ---------- bank details ----------
   $("saveBankBtn").addEventListener("click", () => {
-    const identifier = sessionStorage.getItem("vaa_ref_id") || localStorage.getItem("vaa_ref_id");
+    const identifier = sessionStorage.getItem("vaa_ref_id") || localStorage.getItem("vaa_ref_id") || localStorage.getItem("vaa_ref_code");
     const bankName = $("bankName").value.trim();
     const accountNumber = $("acctNumber").value.trim();
     const accountName = $("acctName").value.trim();
